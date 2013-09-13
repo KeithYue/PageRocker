@@ -3,14 +3,40 @@
 
   "name": "Page Rocker",
   "description": "A chrome extension which can track user's head to control the display of the webpage the user visiting ",
-  "version": "1.0",
-
+  "version": "2.0",
+  "background": {
+      "scripts":["js/background.js"],
+      "persistent": false
+      },
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "popup.html",
     "default_title": "Page Rocker"
   },
+  "content_scripts":[
+  {
+      "matches": ["http://*/*", "https://*/*"],
+      "css":["css/jquery-ui.css"],
+      "js": ["js/jquery.min.js", "js/jquery-ui.js","js/headtrackr.js"]
+      }
+  ],
+  "web_accessible_resources": [
+    "images/animated-overlay.gif",
+    "images/ui-bg_flat_0_aaaaaa_40x100.png",
+    "images/ui-bg_flat_75_ffffff_40x100.png",
+    "images/ui-bg_glass_55_fbf9ee_1x400.png",
+    "images/ui-bg_glass_65_ffffff_1x400.png",
+    "images/ui-bg_glass_75_dadada_1x400.png",
+    "images/ui-bg_glass_75_e6e6e6_1x400.png",
+    "images/ui-bg_glass_95_fef1ec_1x400.png",
+    "images/ui-bg_highlight-soft_75_cccccc_1x100.png",
+    "images/ui-icons_222222_256x240.png",
+    "images/ui-icons_2e83ff_256x240.png",
+    "images/ui-icons_454545_256x240.png",
+    "images/ui-icons_888888_256x240.png",
+    "images/ui-icons_cd0a0a_256x240.png"
+  ],
   "permissions": [
-    "https://secure.flickr.com/"
+    "tabs",
+    "http://*/*"
   ]
 }
