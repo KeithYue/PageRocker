@@ -7,12 +7,19 @@ var inputCanvas = $('<canvas id="inputCanvas" width="320" height="240" style="di
 var inputVideo = $('<video id="inputVideo" autoplay loop width="320" height="240"></video>');
 var overlay = $('<canvas id="overlay" width="320" height="240"></canvas>');
 var debug = $('<canvas id="debug" width="320" height="240"></canvas>');
+/*jshint multistr: true */
+var controlPanelHtml = '\
+<div id="control-panel">\
+    <input type="checkbox" onclick="showProbabilityCanvas()" value="asdfasd"></input>Show probability-map</p>\
+</div>\
+';
 
 // add the html elements to the tail of body
 //
-$('body').append(trackDialog);
-trackDialog.append(videoContainer);
 videoContainer.append(inputCanvas).append(inputVideo).append(overlay).append(debug);
+trackDialog.append(videoContainer);
+trackDialog.append($(controlPanelHtml));
+$('body').append(trackDialog);
 
 //set the dialog layout
 //
@@ -35,13 +42,45 @@ debugOverlay.style.top = topOffset;
 debugOverlay.style.zIndex = '100002';
 debugOverlay.style.display = 'none';
 
-// video tracking vars init
+// video and canvas tracking vars init
 var overlayContext = canvasOverlay.getContext('2d');
 var htracker = new headtrackr.Tracker({
-    ui: false
+    ui: false,
+    calcAngles: true,
+    debug: debugOverlay,
+    headPosition: false
     });
 
+//event handler
+function facetrackingEventHandler(event){
+    // clear canvas
+    overlayContext.clearRect(0,0,320,240);
+    // once we have stable tracking, draw rectangle
+    if (event.detection == "CS") {
+        overlayContext.translate(event.x, event.y);
+        overlayContext.rotate(event.angle-(Math.PI/2));
+        overlayContext.strokeStyle = "#00CC00";
+        overlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
+        overlayContext.rotate((Math.PI/2)-event.angle);
+        overlayContext.translate(-event.x, -event.y);
+        }
+    }
 
+function headtrackrStatusHandler(event){
+    console.log(event.status);
+    }
+function headtrackingEvent(event){
+    }
+
+//helper function
+function showProbabilityCanvas() {
+    var debugCanvas = document.getElementById('debug');
+    if (debugCanvas.style.display == 'none') {
+        debugCanvas.style.display = 'block';
+    } else {
+        debugCanvas.style.display = 'none';
+    }
+}
 
 $('#track-dialog').dialog({
     autoOpen: false,
@@ -61,13 +100,23 @@ $('#track-dialog').dialog({
         },
     open: function(event, ui){
         // console.log($(this));
+        // begin video tracking
         htracker.init(videoInput, canvasInput);
         htracker.start();
         console.log(htracker);
+        
+        // dialog add head track listener
+        document.addEventListener('headtrackrStatus', headtrackrStatusHandler);
+        document.addEventListener('facetrackingEvent', facetrackingEventHandler);
+
         },
     beforeClose: function(event, ui){
         console.log('being closed');
         // remove the tracking dialog
+        //
+        document.removeEventListener('headtrackerStatus');
+        document.removeEventListener('facetrackingEvent');
+
         htracker.stop();
         },
     close: function(event, ui){
@@ -82,4 +131,3 @@ $('#track-dialog').dialog({
 //open the dialog in the right, top of the window
 $('#track-dialog').parent().css({position:"fixed"}).end().dialog('open');
 
-//begin video tracking
