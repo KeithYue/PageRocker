@@ -11,6 +11,7 @@ A chrome extension which can track user's head to control the display of the web
     * user control ui interface
     * status control: stop, start, init the tracker(event listening and so on)
 * add head track and reload function
+* add bootstrap repo
 
 #### Issues
 * can not close the camera when the tracker is closed
@@ -19,5 +20,7 @@ A chrome extension which can track user's head to control the display of the web
 #### Open
 
 #### Development Log
+
+##### 9.15
 
 #### Team Meeting

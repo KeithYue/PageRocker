@@ -21,8 +21,9 @@ var controlPanel = $("\
 </div>\
 ");
 
-// add the dialog to body
 $('body').append(trackDialog);
+// add the dialog to body
+//$('body').append(trackDialog);
 // add the html elements to the tail of body
 //
 function initDialogElement(){
@@ -170,5 +171,15 @@ $('#track-dialog').dialog({
     });
 
 
+// toggle the dialog
+// set the dialog layout to fix on the right top of the window
+// $('#track-dialog').dialog('open');
+// if(trackDialog.dialog('isOpen')){
+//     trackDialog.dialog('close');
+//     }
+// else{
+//     $('body').append(trackDialog);
+//     $('#track-dialog').parent().css({position:"fixed"}).end().dialog('open');
+//     }
+// init the dialog
 $('#track-dialog').parent().css({position:"fixed"}).end().dialog('open');
-
