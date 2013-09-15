@@ -2,22 +2,25 @@
 
 // init the dialog html strings
 var trackDialog = $('<div id="track-dialog" title="Rock Your Page"></div>');
-var videoContainer = $('<div id="video-container"></div>');
-var inputCanvas = $('<canvas id="inputCanvas" width="320" height="240" style="display:block"></canvas>');
-var inputVideo = $('<video id="inputVideo" autoplay loop width="320" height="240"></video>');
-var overlay = $('<canvas id="overlay" width="320" height="240"></canvas>');
-var debug = $('<canvas id="debug" width="320" height="240"></canvas>');
+var videoContainer = $('<div id="video-container" style="height: 250px"></div>');
+var inputCanvas = $('<canvas class="ui-front" id="inputCanvas" width="320" height="240" style="display:block"></canvas>');
+var inputVideo = $('<video class="ui-front"id="inputVideo" autoplay loop width="320" height="240"></video>');
+var overlay = $('<canvas class="ui-front" id="overlay" width="320" height="240"></canvas>');
+var debug = $('<canvas class="ui-front" id="debug" width="320" height="240"></canvas>');
 var overlayContext,
     htracker;
     
 /*jshint multistr: true */
+// <p><input id='reinit-button' type='button'  value='reinitiate facedetection'></input>\
 var controlPanel = $("\
 <div id='control-panel'>\
     <p id='gUMMessage'></p>\
     <p>Status : <span id='headtrackerMessage'></span></p>\
-    <p><input id='reinit-button' type='button'  value='reinitiate facedetection'></input>\
+    <a href='#' id='reinit-button'>Reinitiate Facedetection</a>\
     <br/><br/>\
-    <input id='possibility-button'type='checkbox' value='asdfasd'></input>Show probability-map</p>\
+    <input id='possibility-button' type='checkbox' />\
+    <label for='possibility-button'>Show probability-map</label>\
+    <p></p>\
 </div>\
 ");
 
@@ -47,15 +50,28 @@ function setDialogLayout(){
     videoInput.style.position = "absolute";
     videoInput.style.top = topOffset;
 
+    canvasInput.style.position = "absolute";
+    canvasInput.style.top = topOffset;
+    // canvasInput.style.zIndex = '100000';
+    canvasInput.style.display = 'block';
+
+
+
     canvasOverlay.style.position = "absolute";
     canvasOverlay.style.top = topOffset;
-    canvasOverlay.style.zIndex = '100001';
+    // canvasOverlay.style.zIndex = '100001';
     canvasOverlay.style.display = 'block';
 
     debugOverlay.style.position = "absolute";
     debugOverlay.style.top = topOffset;
-    debugOverlay.style.zIndex = '100002';
+    // debugOverlay.style.zIndex = '100002';
     debugOverlay.style.display = 'none';
+
+    //set style of widgets
+    $('#reinit-button').button();
+    $('#possibility-button').button();
+    
+
     }
 // control panel layout
 
@@ -83,9 +99,32 @@ function facetrackingEventHandler(event){
         }
     }
 
+statusMessages = {
+    "whitebalance" : "checking for stability of camera whitebalance",
+    "detecting" : "Detecting face",
+    "hints" : "Hmm. Detecting the face is taking a long time",
+    "redetecting" : "Lost track of face, redetecting",
+    "lost" : "Lost track of face",
+    "found" : "Tracking face"
+};
+
+supportMessages = {
+    "no getUserMedia" : "Unfortunately, <a href='http://dev.w3.org/2011/webrtc/editor/getusermedia.html'>getUserMedia</a> is not supported in your browser. Try <a href='http://www.opera.com/browser/'>downloading Opera 12</a> or <a href='http://caniuse.com/stream'>another browser that supports getUserMedia</a>. Now using fallback video for facedetection.",
+    "no camera" : "No camera found. Using fallback video for facedetection."
+};
+
 function headtrackrStatusHandler(event){
-    console.log(event.status);
+    // console.log(event.status);
+    var messagep;
+    if (event.status in supportMessages) {
+        messagep = document.getElementById('gUMMessage');
+        messagep.innerHTML = supportMessages[event.status];
+    } else if (event.status in statusMessages) {
+        messagep = document.getElementById('headtrackerMessage');
+        messagep.innerHTML = statusMessages[event.status];
     }
+    }
+
 function headtrackingEvent(event){
     }
 
