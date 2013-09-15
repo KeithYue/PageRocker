@@ -8,7 +8,10 @@ var inputVideo = $('<video class="ui-front"id="inputVideo" autoplay loop width="
 var overlay = $('<canvas class="ui-front" id="overlay" width="320" height="240"></canvas>');
 var debug = $('<canvas class="ui-front" id="debug" width="320" height="240"></canvas>');
 var overlayContext,
-    htracker;
+    htracker,
+    basicFontsize = parseInt($('html').css('font-size'),10), //the original webpage font-size 
+    basicDialogFontSize
+    ;
     
 /*jshint multistr: true */
 // <p><input id='reinit-button' type='button'  value='reinitiate facedetection'></input>\
@@ -72,7 +75,9 @@ function setDialogLayout(){
     //set style of widgets
     $('#reinit-button').button();
     $('#possibility-button').button();
-    
+
+    // set the basic font size
+    basicDialogFontSize = parseInt(trackDialog.css('font-size'),10);
 
     }
 // control panel layout
@@ -228,11 +233,17 @@ function fontSize(ev) {
         videoWidth  = inputVideo.width(),
         face2canvasRatio = videoWidth/faceWidth;
 
-    rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + 10 + 'px';  
+    rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + basicFontsize + 'px';  
     root.style.fontSize = rootSize;
     
-	document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
+	// document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
 	// document.getElementById('font-size').innerHTML = document.defaultView.getComputedStyle(document.getElementById('first-paragraph'),null).getPropertyValue('font-size');
+    // set the dialog font-size to fixed value
+    // trackDialog.css({
+    //     'font-size': basicDialogFontSize
+    //     });
+    // console.log(trackDialog.css('font-size'));
+    
     
 }
 
@@ -247,4 +258,5 @@ function fontSize(ev) {
 //     $('#track-dialog').parent().css({position:"fixed"}).end().dialog('open');
 //     }
 // init the dialog
-$('#track-dialog').parent().css({position:"fixed"}).end().dialog('open');
+// set fixed font-size for the dialog
+$('#track-dialog').parent().css({position:"fixed", 'font-size':"5mm"}).end().dialog('open');
