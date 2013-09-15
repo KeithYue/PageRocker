@@ -16,6 +16,8 @@ var controlPanel = $("\
 <div id='control-panel'>\
     <p id='gUMMessage'></p>\
     <p>Status : <span id='headtrackerMessage'></span></p>\
+    <p><span id='calc-messages'></span></p>\
+    <p><span id=''></span></p>\
     <a href='#' id='reinit-button'>Reinitiate Facedetection</a>\
     <br/><br/>\
     <input id='possibility-button' type='checkbox' />\
@@ -90,12 +92,17 @@ function facetrackingEventHandler(event){
     overlayContext.clearRect(0,0,320,240);
     // once we have stable tracking, draw rectangle
     if (event.detection == "CS") {
+        // console.log('I am going to adjust the font size');
         overlayContext.translate(event.x, event.y);
         overlayContext.rotate(event.angle-(Math.PI/2));
-        overlayContext.strokeStyle = "#00CC00";
+        overlayContext.strokeStyle = "#00CCFF";
         overlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
         overlayContext.rotate((Math.PI/2)-event.angle);
         overlayContext.translate(-event.x, -event.y);
+
+        // adjust the font size
+        fontSize(event);
+
         }
     }
 
@@ -183,7 +190,7 @@ $('#track-dialog').dialog({
         // console.log(htracker);
         
         // dialog add head track listener
-        document.addEventListener('headtrackrStatus', headtrackrStatusHandler);
+        document.addEventListener('headtrackrStatus', headtrackrStatusHandler, true);
         document.addEventListener('facetrackingEvent', facetrackingEventHandler);
 
         // add controller panel listener
@@ -209,6 +216,25 @@ $('#track-dialog').dialog({
     width: 350
     });
 
+//face to size helper functions
+function fontSize(ev) {
+    // console.log('Font Adjusting');
+    // console.log(ev);
+    var root    = document.getElementsByTagName('html')[0],
+        rootSize,
+        b       = document.getElementsByTagName('body')[0];
+    
+    var faceWidth   = ev.width,
+        videoWidth  = inputVideo.width(),
+        face2canvasRatio = videoWidth/faceWidth;
+
+    rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + 10 + 'px';  
+    root.style.fontSize = rootSize;
+    
+	document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
+	// document.getElementById('font-size').innerHTML = document.defaultView.getComputedStyle(document.getElementById('first-paragraph'),null).getPropertyValue('font-size');
+    
+}
 
 // toggle the dialog
 // set the dialog layout to fix on the right top of the window
