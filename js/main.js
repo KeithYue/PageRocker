@@ -12,7 +12,8 @@ var debug = $('<canvas class="ui-front" id="debug" width="320" height="240"></ca
 var overlayContext,
     htracker,
     basicFontsize = parseInt($('html').css('font-size'),10), //the original webpage font-size 
-    basicDialogFontSize
+    basicDialogFontSize,
+    textString = 'p,a,h1,h2,h3,h4,h5,h6'//tags that need to be zoom in or out
     ;
     
 /*jshint multistr: true */
@@ -216,6 +217,10 @@ $('#track-dialog').dialog({
         },
     close: function(event, ui){
         console.log('closed');
+        // set the webpage layout to default style
+        $(textString).css({
+            zoom: 1
+            });
         // remove the dialog from the DOM
         $(this).remove();
         },
@@ -242,7 +247,7 @@ function fontSize(ev) {
      // console.log($('body').not('#track-dialog'));
      // set font size locally
      // console.log($('p a h1 h2 h3 h4 h5 h6'));
-     $('p,a,h1,h2,h3,h4,h5,h6').css({
+     $(textString).css({
         zoom: fixed_fz /( face2canvasRatio )
         });
      // console.log('facewidth/videowidth: '+face2canvasRatio+' f2v / basic value: '+ face2canvasRatio/fixed_fz);
