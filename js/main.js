@@ -13,7 +13,7 @@ var overlayContext,
     htracker,
     basicFontsize = parseInt($('html').css('font-size'),10), //the original webpage font-size 
     basicDialogFontSize,
-    textString = 'p,a,h1,h2,h3,h4,h5,h6'//tags that need to be zoom in or out
+    textString = 'p,a,h1,h2,h3,h4,h5,h6,code'//tags that need to be zoom in or out
     ;
     
 /*jshint multistr: true */
