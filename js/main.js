@@ -1,5 +1,7 @@
 //init the video head track
 
+// the algorithm is face2radio * zoom value  = fixed_fz
+var fixed_fz = 0;
 // init the dialog html strings
 var trackDialog = $('<div id="track-dialog" title="Rock Your Page"></div>');
 var videoContainer = $('<div id="video-container" style="height: 250px"></div>');
@@ -231,12 +233,27 @@ function fontSize(ev) {
     
     var faceWidth   = ev.width,
         videoWidth  = inputVideo.width(),
-        face2canvasRatio = videoWidth/faceWidth;
+        face2canvasRatio = faceWidth/videoWidth;
 
-    rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + basicFontsize + 'px';  
-    root.style.fontSize = rootSize;
-    
-	document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
+    if (fixed_fz === 0){
+        //init the fixed value 
+        fixed_fz = face2canvasRatio;
+        }
+     // console.log($('body').not('#track-dialog'));
+     // set font size locally
+     // console.log($('p a h1 h2 h3 h4 h5 h6'));
+     $('p,a,h1,h2,h3,h4,h5,h6').css({
+        zoom: fixed_fz /( face2canvasRatio )
+        });
+     // console.log('facewidth/videowidth: '+face2canvasRatio+' f2v / basic value: '+ face2canvasRatio/fixed_fz);
+     // console.log('track zoom'+$('#track-dialog').css('zoom'));
+     // console.log('body zoom'+$('body').css('zoom'));
+     // setDialogLayout();
+
+    // rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + basicFontsize + 'px';  
+    // root.style.fontSize = rootSize;
+    // 
+	// document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
 	// document.getElementById('font-size').innerHTML = document.defaultView.getComputedStyle(document.getElementById('first-paragraph'),null).getPropertyValue('font-size');
     // set the dialog font-size to fixed value
     // trackDialog.css({
