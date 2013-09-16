@@ -236,7 +236,7 @@ function fontSize(ev) {
     rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + basicFontsize + 'px';  
     root.style.fontSize = rootSize;
     
-	// document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
+	document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
 	// document.getElementById('font-size').innerHTML = document.defaultView.getComputedStyle(document.getElementById('first-paragraph'),null).getPropertyValue('font-size');
     // set the dialog font-size to fixed value
     // trackDialog.css({
@@ -259,4 +259,4 @@ function fontSize(ev) {
 //     }
 // init the dialog
 // set fixed font-size for the dialog
-$('#track-dialog').parent().css({position:"fixed", 'font-size':"5mm"}).end().dialog('open');
+$('#track-dialog').parent().css({position:"fixed", 'font-size':"16px"}).end().dialog('open');
