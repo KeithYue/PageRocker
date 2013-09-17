@@ -16,7 +16,19 @@
   {
       "matches": ["http://*/*", "https://*/*"],
       "css":["css/jquery-ui.css"],
-      "js": ["js/jquery.min.js", "js/jquery-ui.js","js/three.min.js","js/headtrackr.js"]
+      "js": [
+        "js/Three58.js",
+        "js/Detector.js",
+        "js/Stats.js",
+        "js/OrbitControls.js",
+        "js/THREEx.KeyboardState.js",
+        "js/THREEx.FullScreen.js",
+        "js/THREEx.WindowResize.js",
+        "js/CSS3DRenderer.js",
+        "js/jquery.min.js",
+        "js/jquery-ui.js",
+        "js/headtrackr.js"
+      ]
       }
   ],
   "web_accessible_resources": [
@@ -33,7 +45,9 @@
     "images/ui-icons_2e83ff_256x240.png",
     "images/ui-icons_454545_256x240.png",
     "images/ui-icons_888888_256x240.png",
-    "images/ui-icons_cd0a0a_256x240.png"
+    "images/ui-icons_cd0a0a_256x240.png",
+    "images/checkerboard.jpg",
+    "html_samples/popup.html"
   ],
   "permissions": [
     "tabs",

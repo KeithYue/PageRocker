@@ -1,14 +1,39 @@
-console.log('this is css 3d page');
-/*
- * delete the current page html and create basic html
- * */
-/*jshint multistr: true */
-$('body').html('\
-<div id="ThreeJS" style="position: absolute; left:0px; top:0px">\
-</div>\
-');
-console.log(chrome.extension.getURL("images/checkerboard.jpg"));
+<!doctype html>
+<html lang="en">
+<head>
+	<title>CSS3D (Three.js)</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel=stylesheet href="css/base.css"/>
+</head>
+<body>
 
+<script src="js/Three58.js"></script>
+<script src="js/Detector.js"></script>
+<script src="js/Stats.js"></script>
+<script src="js/OrbitControls.js"></script>
+<script src="js/THREEx.KeyboardState.js"></script>
+<script src="js/THREEx.FullScreen.js"></script>
+<script src="js/THREEx.WindowResize.js"></script>
+
+<!-- new for this example -->
+<script src="js/CSS3DRenderer.js"></script>
+
+<!-- jQuery code to display an information button and box when clicked. -->
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui.js"></script>
+<link rel=stylesheet href="css/jquery-ui.css" />
+<link rel=stylesheet href="css/info.css"/>
+<script src="js/info.js"></script>
+<div id="infoButton"></div>
+<div id="infoBox" title="Demo Information">
+This three.js demo is part of a collection at
+<a href="http://stemkoski.github.io/Three.js/">http://stemkoski.github.io/Three.js/</a>
+</div>
+<!-- ------------------------------------------------------------ -->
+
+<div id="ThreeJS" style="position: absolute; left:0px; top:0px"></div>
+<script>
 /*
 	Three.js "tutorials by example"
 	Author: Lee Stemkoski
@@ -31,7 +56,7 @@ var rendererCSS;
 init();
 animate();
 
-// FUNCTIONS 
+// FUNCTIONS 		
 function init() 
 {
 	// SCENE
@@ -67,14 +92,10 @@ function init()
 	light.position.set(0,250,0);
 	scene.add(light);
 	// FLOOR
-	// var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
-	// floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
-	// floorTexture.repeat.set( 10, 10 );
-	// var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-    var floorMaterial = new THREE.MeshBasicMaterial({
-        color: 0x000000,
-        wireframe:true
-        });
+	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
+	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+	floorTexture.repeat.set( 10, 10 );
+	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
 	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.position.y = -0.5;
@@ -97,9 +118,9 @@ function init()
 	// create a new scene to hold CSS
 	cssScene = new THREE.Scene();
 	// create the iframe to contain webpage
-	var element	= document.createElement('iframe');
+	var element	= document.createElement('iframe')
 	// webpage to be loaded into iframe
-	element.src	= window.location.href;
+	element.src	= "index.html";
 	// width of iframe in pixels
 	var elementWidth = 1024;
 	// force iframe to have same relative dimensions as planeGeometry
@@ -123,8 +144,8 @@ function init()
 	rendererCSS	= new THREE.CSS3DRenderer();
 	rendererCSS.setSize( window.innerWidth, window.innerHeight );
 	rendererCSS.domElement.style.position = 'absolute';
-	rendererCSS.domElement.style.top  = 0;
-	rendererCSS.domElement.style.margin  = 0;
+	rendererCSS.domElement.style.top	  = 0;
+	rendererCSS.domElement.style.margin	  = 0;
 	rendererCSS.domElement.style.padding  = 0;
 	document.body.appendChild( rendererCSS.domElement );
 	// when window resizes, also resize this renderer
@@ -162,3 +183,8 @@ function render()
 	rendererCSS.render( cssScene, camera );
 	renderer.render( scene, camera );
 }
+
+</script>
+
+</body>
+</html>
