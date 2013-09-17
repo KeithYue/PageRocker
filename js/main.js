@@ -13,7 +13,7 @@ var overlayContext,
     htracker,
     basicFontsize = parseInt($('html').css('font-size'),10), //the original webpage font-size 
     basicDialogFontSize,
-    textString = 'p,a,h1,h2,h3,h4,h5,h6,code'//tags that need to be zoom in or out
+    textString = 'p,a,h1,h2,h3,h4,h5,h6,code,span,img,pre'//tags that need to be zoom in or out
     ;
     
 /*jshint multistr: true */
@@ -28,6 +28,9 @@ var controlPanel = $("\
     <br/><br/>\
     <input id='possibility-button' type='checkbox' />\
     <label for='possibility-button'>Show probability-map</label>\
+    <br/><br/>\
+    <input id='rotate-button' type='checkbox'>\
+    <label for='rotate-button'>Rotate Page</label>\
     <p></p>\
 </div>\
 ");
@@ -77,7 +80,7 @@ function setDialogLayout(){
 
     //set style of widgets
     $('#reinit-button').button();
-    $('#possibility-button').button();
+    // $('#possibility-button').button();
 
     // set the basic font size
     basicDialogFontSize = parseInt(trackDialog.css('font-size'),10);
@@ -265,6 +268,7 @@ function fontSize(ev) {
     //     'font-size': basicDialogFontSize
     //     });
     // console.log(trackDialog.css('font-size'));
+    // console.log(event.angle);
     
     
 }
