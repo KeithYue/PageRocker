@@ -94,7 +94,7 @@ htracker = new headtrackr.Tracker({
     ui: false,
     calcAngles: true,
     debug: debug.get(0), // using normal DOM element
-    headPosition: false
+    headPosition: true
     });
 
 //event handler
@@ -143,7 +143,9 @@ function headtrackrStatusHandler(event){
     }
     }
 
-function headtrackingEvent(event){
+function headtrackingEventHandler(event){
+    console.log('I am head tracking handler');
+    console.log('x: '+event.x+' y: '+event.y+' z: '+event.z);
     }
 
 //helper function
@@ -203,6 +205,7 @@ $('#track-dialog').dialog({
         // dialog add head track listener
         document.addEventListener('headtrackrStatus', headtrackrStatusHandler, true);
         document.addEventListener('facetrackingEvent', facetrackingEventHandler);
+        document.addEventListener('headtrackingEvent',headtrackingEventHandler);
 
         // add controller panel listener
         addControllPanelListener();

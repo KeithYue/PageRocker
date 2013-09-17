@@ -18,6 +18,7 @@ A chrome extension which can track user's head to control the display of the web
 
 #### Open
 * add 3D page rotate function(Wikipedia: Head-coupled perspective, using headtracking event instead of facetracking)
+* Displays an interactive webpage within a Three.js and add head-coupled effect.
 
 #### Development Log
 

@@ -16,7 +16,7 @@
   {
       "matches": ["http://*/*", "https://*/*"],
       "css":["css/jquery-ui.css"],
-      "js": ["js/jquery.min.js", "js/jquery-ui.js","js/headtrackr.js"]
+      "js": ["js/jquery.min.js", "js/jquery-ui.js","js/three.min.js","js/headtrackr.js"]
       }
   ],
   "web_accessible_resources": [
