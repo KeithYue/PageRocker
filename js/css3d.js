@@ -9,15 +9,6 @@ $('body').html('\
 ');
 console.log(chrome.extension.getURL("images/checkerboard.jpg"));
 
-/*
-	Three.js "tutorials by example"
-	Author: Lee Stemkoski
-	Date: July 2013 (three.js v58)
-	
-	This demo is based on the work of Jerome Etienne:
-	http://learningthreejs.com/blog/2013/04/30/closing-the-gap-between-html-and-webgl/
-	
- */
 
 // MAIN
 
