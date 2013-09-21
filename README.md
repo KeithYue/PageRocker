@@ -1,7 +1,7 @@
 PageRocker
 ==========
 
-<img src="http://ww1.sinaimg.cn/large/6a1456b2gw1e8u1nl3bn1j20dw0i1dic.jpg" width:250 />
+![Rock Your Page](http://ww3.sinaimg.cn/large/6a1456b2gw1e8u23fxfjjj206y091wfa.jpg)
 
 A chrome extension which can track user's head to control the display of the webpage the user visiting. When zooming in or out, we keep the modal of div static, we just adjust the textual element.
 
