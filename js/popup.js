@@ -12,3 +12,10 @@ $('#page-rotater').click(function(e){
         });
     window.close();
     });
+$('#page-rocker').click(function(e){
+    console.log('this is page rocker');
+    chrome.tabs.executeScript(null, {
+        file: "js/harlem-shake-script.js"
+        });
+    window.close();
+    });
