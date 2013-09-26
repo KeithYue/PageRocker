@@ -27,6 +27,7 @@ A chrome extension which can track user's head to control the display of the web
 * add 3D page rotate function(Wikipedia: Head-coupled perspective, using headtracking event instead of facetracking)
 * Displays an interactive webpage within a Three.js and add head-coupled effect.
 * Rock Your page based on build-in music rythm
+* using audiolib.js to implement page rocker
 
 #### Development Log
 

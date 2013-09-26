@@ -28,7 +28,8 @@
         "js/CSS3DRenderer.js",
         "js/jquery.min.js",
         "js/jquery-ui.js",
-        "js/headtrackr.js"
+        "js/headtrackr.js",
+        "js/audiolib.min.js"
       ]
       }
   ],

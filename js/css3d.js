@@ -153,3 +153,78 @@ function render()
 	rendererCSS.render( cssScene, camera );
 	renderer.render( scene, camera );
 }
+
+// set face tracking and video input
+// set up a simple dialog to track face instead of a complex one
+/*jshint multistr: true */
+var trackDialog = $('\
+<div id="tracking-panel">\
+    <div id="video-container" style="height: 250px; width: 350px">\
+        <canvas class="ui-front" id="inputCanvas" width="320" height="240" style="display:block; position: absolute;"></canvas>\
+        <video class="ui-front"id="inputVideo" autoplay loop width="320" height="240" style="display: blick; position: absolute"></video>\
+        <canvas class="ui-front" style="display: blick; position: absolute" id="overlay" width="320" height="240"></canvas>\
+        <canvas class="ui-front" id="debug" width="320" height="240" style="position: absolute display:none"></canvas>\
+    </div>\
+    <button onclick="htracker.stop();htracker.start()">Reinitiate Facedetection</button>\
+</div>\
+');
+
+$('body').append(trackDialog);
+
+overlayContext = $('#overlay').get(0).getContext('2d');
+htracker = new headtrackr.Tracker({
+    ui: false,
+    calcAngles: true,
+    debug: $('#debug').get(0), // using normal DOM element
+    headPosition: true
+    });
+
+function facetrackingEventHandler(event){
+    // clear canvas
+    overlayContext.clearRect(0,0,320,240);
+    // once we have stable tracking, draw rectangle
+    if (event.detection == "CS") {
+        // console.log('I am going to adjust the font size');
+        overlayContext.translate(event.x, event.y);
+        overlayContext.rotate(event.angle-(Math.PI/2));
+        overlayContext.strokeStyle = "#00CCFF";
+        overlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
+        overlayContext.rotate((Math.PI/2)-event.angle);
+        overlayContext.translate(-event.x, -event.y);
+
+        // adjust the font size
+
+        }
+    }
+$('#tracking-panel').dialog({
+    autoOpen: false,
+    resizable: false,
+    position: {
+        my: "right top",
+        at: "right top",
+        of: $(window)
+        },
+    show: {
+        effect: "blind",
+        duration: 1000
+        },
+    hide: {
+        effect: "explode",
+        duration: 1000
+        },
+    open: function(event, ui){
+        htracker.init($('#inputVideo').get(0), $('#inputCanvas').get(0));
+        htracker.start();
+
+        // add event listener
+        document.addEventListener('facetrackingEvent', facetrackingEventHandler);
+        },
+    close:function(event, ui){
+        htracker.stop();
+        document.removeEventListener('facetrackingEvent');
+        $(this).remove();
+        },
+    width: 350
+    });
+
+$('#tracking-panel').parent().css({position:"fixed"}).end().dialog('open');

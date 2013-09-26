@@ -19,3 +19,10 @@ $('#page-rocker').click(function(e){
         });
     window.close();
     });
+$('#page-tester').click(function(e){
+    console.log('this is page tester');
+    chrome.tabs.executeScript(null, {
+        file: "js/test.js"
+        });
+    window.close();
+});
