@@ -5,8 +5,7 @@
   "description": "A chrome extension which can track user's head to control the display of the webpage the user visiting ",
   "version": "2.0",
   "background": {
-      "scripts":["js/background.js"],
-      "persistent": false
+      "page":"background.html"
       },
   "browser_action": {
     "default_icon": "rock.png",
@@ -29,7 +28,7 @@
         "js/jquery.min.js",
         "js/jquery-ui.js",
         "js/headtrackr.js",
-        "js/audiolib.min.js"
+        "js/soundmanager2-jsmin.js"
       ]
       }
   ],
@@ -49,7 +48,9 @@
     "images/ui-icons_888888_256x240.png",
     "images/ui-icons_cd0a0a_256x240.png",
     "images/checkerboard.jpg",
-    "html_samples/popup.html"
+    "html_samples/popup.html",
+    "songs/creazy_kids.m4a",
+    "songs/moves_like_jagger.mp3"
   ],
   "permissions": [
     "tabs",

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  
+</body>
+<script type="text/javascript" src="./js/soundmanager2-jsmin.js"></script>
+<script type="text/javascript">
+file_path = 'songs/moves_like_jagger.mp3';
+
+// audio_html = '<audio id="move_like_jagger"/>';
+// $('body').append($(audio_html));
+// $('#player').get(0).play();
+soundManager.setup({
+    preferFlash: false,
+    useHTML5Audio: true,
+    onready: function(e){
+        var mySound = soundManager.createSound({
+            id: 'move_like_jagger',
+            url: file_path
+            });
+        mySound.play();
+        console.log(e);
+        console.log('I am starting!!');
+        },
+    ontimeout: function(){
+        }
+    });
+console.log(soundManager);
+</script>
+</html>
