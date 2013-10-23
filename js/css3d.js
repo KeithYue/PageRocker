@@ -30,6 +30,7 @@ function init()
 	// CAMERA
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+    // custome
 	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
 	scene.add(camera);
 	camera.position.set(0,150,400);
@@ -179,12 +180,16 @@ htracker = new headtrackr.Tracker({
     headPosition: true
     });
 
+// set up camera controller
+// headtrackr.controllers.three.realisticAbsoluteCameraControl(camera, 27, [0,0,0], new THREE.Vector3(0,0,0), {damping : 0.5});
+// headtrackr.controllers.three.realisticRelativeCameraControl(camera, 27, [0,0,0]);
+
 function facetrackingEventHandler(event){
     // clear canvas
     overlayContext.clearRect(0,0,320,240);
     // once we have stable tracking, draw rectangle
     if (event.detection == "CS") {
-        // console.log('I am going to adjust the font size');
+        console.log('I am going to adjust the font size');
         overlayContext.translate(event.x, event.y);
         overlayContext.rotate(event.angle-(Math.PI/2));
         overlayContext.strokeStyle = "#00CCFF";

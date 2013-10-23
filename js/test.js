@@ -4,15 +4,27 @@
 // console.log('I am test page');
 console.log('I am test page!!!');
 
-var file_path = chrome.extension.getURL('songs/moves_like_jagger.mp3');
-var context = new webkitAudioContext();
+var file_path = chrome.extension.getURL('songs/creazy_kids.m4a');
+var context = new webkitAudioContext(); //represents a set of AudioNode objects and their connections.
 console.log(context);
-var audioBuffer;
-var sourceNode;
-var textString = 'p,a,h1,h2,h3,h4,h5,h6,code,span,img,pre,li'; //tags that need to be zoom in or out
+var audioBuffer; // the music buffer begin loaded
+var sourceNode; // source node of input buffer
+// var textString = 'p,a,h1,h2,h3,h4,h5,h6,code,span,img,pre,li'; //tags that need to be zoom in or out
+// the effect need to be added:
+// zoom in, zoom out --> image
+// show, hide --> text
+// ratate --> -45--+45 deg
+images = 'img';
+text = 'p';
+links = 'a';
 
-text_nodes = $(textString);
-step = text_nodes / 256; // rock your page partially
+// box_nodes = $(boxNodes);
+
+images = $(images);
+text = $(text);
+links = $(links);
+console.log(links);
+// step = text_nodes / 256; // rock your page partially
 
 setupAudioNodes();
 loadSound(file_path);
@@ -33,13 +45,15 @@ function setupAudioNodes(){
     analyser2.fftSize  = 1024;
 
     // real time handler
-    javascriptNode.onaudioprocess = function(){
+    javascriptNode.onaudioprocess = function(e){
+        // console.log(e);
         // console.log('Javascript node is being called');
         var array =  new Uint8Array(analyser.frequencyBinCount);
         analyser.getByteFrequencyData(array);
         // var average = getAverageVolume(array);
         rock_page(array);
         };
+
 
     sourceNode = context.createBufferSource();
     splitter = context.createChannelSplitter();
@@ -75,8 +89,16 @@ function loadSound(url){
 function playSound(buffer){
     sourceNode.buffer = buffer;
     sourceNode.noteOn(0);
+    // sourceNode.start();
+    console.log(sourceNode);
+    sourceNode.onended = onMusicEnd;
     }
 
+function onMusicEnd(e){
+    console.log('The music is finished');
+
+    // restore the html page
+    }
 function onError(e){
     console.log(e);
     }
@@ -92,17 +114,28 @@ function getAverageVolume(array){
     return average;
 
     }
+
+opacity = 1.0;
 function rock_page(array){
-    // rock your page fully
-    // for(var i = 0;i< text_nodes.length;i++){
-    //     $(text_nodes[i]).css({
-    //         zoom: array[i % 256]/150 + 0.5
-    //         });
-    //     }
-    for(var i= 0; i< 256;i++){
-        if(text_nodes[i]){
-            $(text_nodes[i]).css({
-                zoom: 1.2*array[i]/150 + 0.1
+    for(var i = 0; i < 256; i++){
+        // console.log(array[i]);
+        amp = array[i] / 255;
+        if(images[i]){
+            $(images[i]).transition({
+                scale: 0.5 + amp,
+                duration: 0
+                });
+            }
+        if(text[i]){
+            $(text[i]).transition({
+                x: -10 + amp * 20,
+                duration: 0
+                });
+            }
+        if(links[i]){
+            $(links[i]).transition({
+                rotate: (-30 + amp * 60) + 'deg',
+                duration: 0
                 });
             }
         }

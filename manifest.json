@@ -27,6 +27,7 @@
         "js/CSS3DRenderer.js",
         "js/jquery.min.js",
         "js/jquery-ui.js",
+        "js/jquery.transit.min.js",
         "js/headtrackr.js",
         "js/soundmanager2-jsmin.js"
       ]
