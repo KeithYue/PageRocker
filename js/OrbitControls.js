@@ -236,19 +236,19 @@ THREE.OrbitControls = function ( object, domElement ) {
 		
 		if ( state === STATE.ROTATE ) {
 
-			//state = STATE.ROTATE;
+			state = STATE.ROTATE;
 
 			rotateStart.set( event.clientX, event.clientY );
 
 		} else if ( state === STATE.ZOOM ) {
 
-			//state = STATE.ZOOM;
+			state = STATE.ZOOM;
 
 			zoomStart.set( event.clientX, event.clientY );
 
 		} else if ( state === STATE.PAN ) {
 
-			//state = STATE.PAN;
+			state = STATE.PAN;
 
 		}
 
@@ -348,10 +348,11 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		if ( scope.enabled === false ) return;
 		if ( scope.userPan === false ) return;
+        console.log(event.keyCode);
 
 		switch ( event.keyCode ) {
 
-			/*case scope.keys.UP:
+			case scope.keys.UP:
 				scope.pan( new THREE.Vector3( 0, 1, 0 ) );
 				break;
 			case scope.keys.BOTTOM:
@@ -363,7 +364,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 			case scope.keys.RIGHT:
 				scope.pan( new THREE.Vector3( 1, 0, 0 ) );
 				break;
-			*/
+			
 			case scope.keys.ROTATE:
 				state = STATE.ROTATE;
 				break;

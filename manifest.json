@@ -18,8 +18,11 @@
       "css":["css/jquery-ui.css"],
       "js": [
         "js/Three58.js",
+        "js/PointerLockControls.js",
+        "js/OrbitControls.js",
         "js/Detector.js",
         "js/Stats.js",
+        "js/TrackballControls.js",
         "js/OrbitControls.js",
         "js/THREEx.KeyboardState.js",
         "js/THREEx.FullScreen.js",

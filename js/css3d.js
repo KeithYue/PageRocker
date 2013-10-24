@@ -16,9 +16,146 @@ console.log(chrome.extension.getURL("images/checkerboard.jpg"));
 var container, scene, camera, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
+var time = Date.now();
 // custom global variables
 var rendererCSS;
 
+// PointerLock
+// setupPointerLock();
+// setup pointer lock
+PointerLockManager = function (camera){
+    var scope = this;
+    var pitchObject = new THREE.Object3D();
+    pitchObject.add(camera);
+    var yawObject = new THREE.Object3D();
+    yawObject.position.x = 0;
+    yawObject.position.y = 0;
+    yawObject.position.z = 200;
+    yawObject.add(pitchObject);
+	var zoomIn = false;
+	var zoomOut = false;
+	var moveLeft = false;
+	var moveRight = false;
+    var moveUp = false;
+    var moveDown = false;
+	var velocity = new THREE.Vector3();
+	var PI_2 = Math.PI / 2;
+	this.getObject = function () {
+		return yawObject;
+	};
+	var onMouseMove = function ( event ) {
+
+		if ( scope.enabled === false ) return;
+
+		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+
+		yawObject.rotation.y -= movementX * 0.002;
+		pitchObject.rotation.x -= movementY * 0.002;
+
+		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
+
+	};
+	var onKeyDown = function ( event ) {
+        console.log(event.keyCode);
+		switch ( event.keyCode ) {
+
+			case 38: // up
+			case 87: // w
+				moveUp = true;
+				break;
+
+			case 37: // left
+			case 65: // a
+				moveLeft = true; break;
+
+			case 40: // down
+			case 83: // s
+				moveDown = true;
+				break;
+
+			case 39: // right
+			case 68: // d
+				moveRight = true;
+				break;
+
+			case 32: // space
+				if ( canJump === true ) velocity.y += 10;
+				canJump = false;
+				break;
+            case 74: // j -- zoom in
+                zoomIn = true;
+                break;
+            case 75:
+                zoomOut = true;
+                break;
+
+		}
+
+	};
+	var onKeyUp = function ( event ) {
+
+		switch( event.keyCode ) {
+
+			case 38: // up
+			case 87: // w
+				moveUp = false;
+				break;
+
+			case 37: // left
+			case 65: // a
+				moveLeft = false;
+				break;
+
+			case 40: // down
+			case 83: // s
+				moveDown = false;
+				break;
+
+			case 39: // right
+			case 68: // d
+				moveRight = false;
+				break;
+            case 74: // j
+                zoomIn = false;
+                break;
+            case 75:// k
+                zoomOut = false;
+                break;
+
+		}
+
+	};
+    document.addEventListener('mousemove', onMouseMove, false);
+	document.addEventListener( 'keydown', onKeyDown, false );
+	document.addEventListener( 'keyup', onKeyUp, false );
+    this.update = function(delta){
+        delta *= 0.1;
+		velocity.x += ( - velocity.x ) * 0.08 * delta;
+		velocity.z += ( - velocity.z ) * 0.08 * delta;
+		velocity.y += ( - velocity.y ) * 0.08 * delta;
+
+		// velocity.y -= 0.25 * delta;
+		if ( moveUp ) velocity.y += 0.12 * delta;
+		if ( moveDown ) velocity.y -= 0.12 * delta;
+
+		if ( moveLeft ) velocity.x -= 0.12 * delta;
+		if ( moveRight ) velocity.x += 0.12 * delta;
+        if (zoomIn) velocity.z -= 0.12 * delta;
+        if (zoomOut) velocity.z +=  0.12 * delta;
+
+		yawObject.translateX( velocity.x );
+		yawObject.translateY( velocity.y ); 
+		yawObject.translateZ( velocity.z );
+        // if(yawObject.position.y < 0){
+        //     velocity.y = 0;
+        //     yawObject.position.y = 0;
+        //     }
+
+        };
+    };
+
+// begin render
 init();
 animate();
 
@@ -33,8 +170,9 @@ function init()
     // custome
 	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
 	scene.add(camera);
-	camera.position.set(0,150,400);
-	camera.lookAt(scene.position);	
+	// camera.position.set(0,0,500);
+	// camera.lookAt(scene.position);	
+    // 
 	// RENDERER
 	if ( Detector.webgl )
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
@@ -46,8 +184,11 @@ function init()
 	// EVENTS
 	THREEx.WindowResize(renderer, camera);
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
-	// CONTROLS
-	controls = new THREE.OrbitControls( camera, renderer.domElement );
+    // controls = new THREE.OrbitControls(camera, renderer.domElement);
+    // pointerlock control
+    controls = new PointerLockManager(camera);
+    console.log(controls);
+    scene.add(controls.getObject());
 	// STATS
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
@@ -63,6 +204,7 @@ function init()
 	// floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
 	// floorTexture.repeat.set( 10, 10 );
 	// var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+    //
     var floorMaterial = new THREE.MeshBasicMaterial({
         color: 0x000000,
         wireframe:true
@@ -71,7 +213,7 @@ function init()
 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.position.y = -0.5;
 	floor.rotation.x = Math.PI / 2;
-	scene.add(floor);
+	// scene.add(floor);
 
 	////////////
 	// CUSTOM //
@@ -79,10 +221,11 @@ function init()
 	
 	var planeMaterial   = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.1, side: THREE.DoubleSide });
 	var planeWidth = 360;
-    var planeHeight = 120;
+    var planeHeight = 360;
 	var planeGeometry = new THREE.PlaneGeometry( planeWidth, planeHeight );
 	var planeMesh= new THREE.Mesh( planeGeometry, planeMaterial );
-	planeMesh.position.y += planeHeight/2;
+	// planeMesh.position.y += planeHeight/2;
+    planeMesh.position.y = 0;
 	// add it to the standard (WebGL) scene
 	scene.add(planeMesh);
 	
@@ -139,13 +282,13 @@ function animate()
 
 function update()
 {
-	if ( keyboard.pressed("z") ) 
+	if ( keyboard.pressed("a") ) 
 	{ 
-		// do something
 	}
 	
-	controls.update();
+    controls.update(Date.now() - time);
 	stats.update();
+    time = Date.now();
 }
 
 function render() 
@@ -155,81 +298,8 @@ function render()
 	renderer.render( scene, camera );
 }
 
-// set face tracking and video input
-// set up a simple dialog to track face instead of a complex one
-/*jshint multistr: true */
-var trackDialog = $('\
-<div id="tracking-panel">\
-    <div id="video-container" style="height: 250px; width: 350px">\
-        <canvas class="ui-front" id="inputCanvas" width="320" height="240" style="display:block; position: absolute;"></canvas>\
-        <video class="ui-front"id="inputVideo" autoplay loop width="320" height="240" style="display: blick; position: absolute"></video>\
-        <canvas class="ui-front" style="display: blick; position: absolute" id="overlay" width="320" height="240"></canvas>\
-        <canvas class="ui-front" id="debug" width="320" height="240" style="position: absolute display:none"></canvas>\
-    </div>\
-    <button onclick="htracker.stop();htracker.start()">Reinitiate Facedetection</button>\
-</div>\
-');
+// function to setup pointerlock contrl
+document.addEventListener('keydown',function(e){
+    // console.log(e);
+    },false);
 
-$('body').append(trackDialog);
-
-overlayContext = $('#overlay').get(0).getContext('2d');
-htracker = new headtrackr.Tracker({
-    ui: false,
-    calcAngles: true,
-    debug: $('#debug').get(0), // using normal DOM element
-    headPosition: true
-    });
-
-// set up camera controller
-// headtrackr.controllers.three.realisticAbsoluteCameraControl(camera, 27, [0,0,0], new THREE.Vector3(0,0,0), {damping : 0.5});
-// headtrackr.controllers.three.realisticRelativeCameraControl(camera, 27, [0,0,0]);
-
-function facetrackingEventHandler(event){
-    // clear canvas
-    overlayContext.clearRect(0,0,320,240);
-    // once we have stable tracking, draw rectangle
-    if (event.detection == "CS") {
-        console.log('I am going to adjust the font size');
-        overlayContext.translate(event.x, event.y);
-        overlayContext.rotate(event.angle-(Math.PI/2));
-        overlayContext.strokeStyle = "#00CCFF";
-        overlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
-        overlayContext.rotate((Math.PI/2)-event.angle);
-        overlayContext.translate(-event.x, -event.y);
-
-        // adjust the font size
-
-        }
-    }
-$('#tracking-panel').dialog({
-    autoOpen: false,
-    resizable: false,
-    position: {
-        my: "right top",
-        at: "right top",
-        of: $(window)
-        },
-    show: {
-        effect: "blind",
-        duration: 1000
-        },
-    hide: {
-        effect: "explode",
-        duration: 1000
-        },
-    open: function(event, ui){
-        htracker.init($('#inputVideo').get(0), $('#inputCanvas').get(0));
-        htracker.start();
-
-        // add event listener
-        document.addEventListener('facetrackingEvent', facetrackingEventHandler);
-        },
-    close:function(event, ui){
-        htracker.stop();
-        document.removeEventListener('facetrackingEvent');
-        $(this).remove();
-        },
-    width: 350
-    });
-
-$('#tracking-panel').parent().css({position:"fixed"}).end().dialog('open');
