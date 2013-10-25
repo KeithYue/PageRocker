@@ -17,7 +17,10 @@
 <body>
 <div class="container">
   <div class="page-header">
-    <h2>Rock Your Page</h2>
+    <h2 class="text-center">
+      <img src="rock.png" alt="" style="width:64px; height:64px;" class="img-thumbnail"/>
+      Rock Your Page
+    </h2>
   </div>
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
@@ -45,6 +48,21 @@
       <p>
         Please select a song and rock your page. ✌
       </p>
+      <form action="" class="form-inline" role="form">
+        <div class="input-group">
+          <div class="input-group-btn" id="songs-selector">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              Songs
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#">Crazy Kids</a></li>
+              <li><a href="#">Move Like A Jagger</a></li>
+            </ul>
+          </div>
+          <input type="text" class="form-control"/>
+        </div>
+      </form>
       <p class="text-center">
         <button id="page-rocker" class="btn btn-primary">Page Rocker</button>
       </p>

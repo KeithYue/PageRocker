@@ -2,9 +2,15 @@
 // var player = AV.Player.fromURL(chrome.extension.getURL('songs/moves_like_jagger.mp3'));
 // console.log(chrome.extension.getURL('songs/moves_like_jagger.mp3'));
 // console.log('I am test page');
-console.log('I am test page!!!');
 
-var file_path = chrome.extension.getURL('songs/creazy_kids.m4a');
+var songs = new Array();
+songs[0] = 'songs/creazy_kids.m4a';
+songs[1] = 'songs/moves_like_jagger.mp3';
+
+console.log(window.rock_state);
+var states = window.rock_state.rocker;
+
+var file_path = chrome.extension.getURL(songs[states.song]);
 var context = new webkitAudioContext(); //represents a set of AudioNode objects and their connections.
 console.log(context);
 var audioBuffer; // the music buffer begin loaded

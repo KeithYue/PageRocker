@@ -7,6 +7,8 @@ A chrome extension which can track user's head to control the display of the web
 
 #### Todo
 * Rock page: flash screen is not perfect shown.
+    * [ ] let user to select songs
+    * [ ] background page state management
 * Page Rotater: have not added 3D-HEAD-COUPLED transform
     * Add keyboard control
 * Page Sizer: Nothing

@@ -1,4 +1,9 @@
 //init the video head track
+//
+// background page test
+// event handler
+// console.log(chrome.extension.getBackgroundPage());
+console.log(window.rock_state);
 
 // the algorithm is face2radio * zoom value  = fixed_fz
 var fixed_fz = 0;
