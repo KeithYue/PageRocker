@@ -192,7 +192,6 @@ $('#track-dialog').dialog({
         duration: 1000
         },
     hide: {
-        width: 500
         effect: "explode",
         duration: 1000
         },

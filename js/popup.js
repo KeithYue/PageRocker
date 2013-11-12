@@ -38,7 +38,7 @@ $('#page-rocker').click(function(e){
         code: get_state_code()
         });
     chrome.tabs.executeScript(null, {
-        file: "js/harlem-shake-script.js"
+        file: "js/test.js"
         });
     window.close();
     });
