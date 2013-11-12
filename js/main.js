@@ -192,6 +192,7 @@ $('#track-dialog').dialog({
         duration: 1000
         },
     hide: {
+        width: 500
         effect: "explode",
         duration: 1000
         },
@@ -261,23 +262,6 @@ function fontSize(ev) {
      $(textString).css({
         zoom: fixed_fz /( face2canvasRatio )
         });
-     // console.log('facewidth/videowidth: '+face2canvasRatio+' f2v / basic value: '+ face2canvasRatio/fixed_fz);
-     // console.log('track zoom'+$('#track-dialog').css('zoom'));
-     // console.log('body zoom'+$('body').css('zoom'));
-     // setDialogLayout();
-
-    // rootSize = Math.round(face2canvasRatio*10)/10 - 1.5 + basicFontsize + 'px';  
-    // root.style.fontSize = rootSize;
-    // 
-	// document.getElementById('calc-messages').innerHTML = 'Width: ' + faceWidth + '<br /> ratio: ' + face2canvasRatio + '<br /> Root size: ' + rootSize;
-	// document.getElementById('font-size').innerHTML = document.defaultView.getComputedStyle(document.getElementById('first-paragraph'),null).getPropertyValue('font-size');
-    // set the dialog font-size to fixed value
-    // trackDialog.css({
-    //     'font-size': basicDialogFontSize
-    //     });
-    // console.log(trackDialog.css('font-size'));
-    // console.log(event.angle);
-    
     
 }
 

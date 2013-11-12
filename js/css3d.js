@@ -3,11 +3,10 @@ console.log('this is css 3d page');
  * delete the current page html and create basic html
  * */
 /*jshint multistr: true */
-$('body').html('\
-<div id="ThreeJS" style="position: absolute; left:0px; top:0px">\
-</div>\
-');
+
+
 console.log(chrome.extension.getURL("images/checkerboard.jpg"));
+console.log(window.rock_state);
 
 
 // MAIN
@@ -19,6 +18,10 @@ var clock = new THREE.Clock();
 var time = Date.now();
 // custom global variables
 var rendererCSS;
+var cameraDistance = 1000;
+var extraUrls = [
+    window.location.href
+]; // urls needed to be displayed
 
 // PointerLock
 // setupPointerLock();
@@ -30,7 +33,7 @@ PointerLockManager = function (camera){
     var yawObject = new THREE.Object3D();
     yawObject.position.x = 0;
     yawObject.position.y = 0;
-    yawObject.position.z = 200;
+    yawObject.position.z = cameraDistance;
     yawObject.add(pitchObject);
 	var zoomIn = false;
 	var zoomOut = false;
@@ -155,15 +158,14 @@ PointerLockManager = function (camera){
         };
     };
 
-// begin render
-init();
-animate();
 
 // FUNCTIONS 
 function init() 
 {
 	// SCENE
 	scene = new THREE.Scene();
+    // Fog
+    setSceneFog(scene);
 	// CAMERA
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -174,8 +176,10 @@ function init()
 	// camera.lookAt(scene.position);	
     // 
 	// RENDERER
-	if ( Detector.webgl )
+	if ( Detector.webgl ){
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
+        renderer.setClearColor( scene.fog.color );
+    }
 	else
 		renderer = new THREE.CanvasRenderer(); 
 	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -186,9 +190,30 @@ function init()
 	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
     // controls = new THREE.OrbitControls(camera, renderer.domElement);
     // pointerlock control
-    controls = new PointerLockManager(camera);
-    console.log(controls);
-    scene.add(controls.getObject());
+    // controls = new PointerLockManager(camera);
+    // console.log(controls);
+    // scene.add(controls.getObject());
+    // set the right controller for user
+    console.log(window.rock_state.rotater.controller_id);
+    switch(window.rock_state.rotater.controller_id){
+        case '1':{
+            controls = new PointerLockManager(camera);
+            console.log(controls);
+            scene.add(controls.getObject());
+            }
+            break;
+        case '2':{
+            // set camera position
+            console.log('I am orbit!!!');
+            camera.position.set(0,0,cameraDistance);
+            camera.lookAt(scene.position);
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            }
+            break;
+        default:{
+            break;
+            }
+        }
 	// STATS
 	stats = new Stats();
 	stats.domElement.style.position = 'absolute';
@@ -196,9 +221,10 @@ function init()
 	stats.domElement.style.zIndex = 100;
 	container.appendChild( stats.domElement );
 	// LIGHT
-	var light = new THREE.PointLight(0xffffff);
-	light.position.set(0,250,0);
-	scene.add(light);
+	// var light = new THREE.PointLight(0xffffff);
+	// light.position.set(0,250,0);
+	// scene.add(light);
+    addLights(scene);
 	// FLOOR
 	// var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
 	// floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
@@ -218,41 +244,18 @@ function init()
 	////////////
 	// CUSTOM //
 	////////////
-	
-	var planeMaterial   = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.1, side: THREE.DoubleSide });
-	var planeWidth = 360;
-    var planeHeight = 360;
-	var planeGeometry = new THREE.PlaneGeometry( planeWidth, planeHeight );
-	var planeMesh= new THREE.Mesh( planeGeometry, planeMaterial );
-	// planeMesh.position.y += planeHeight/2;
-    planeMesh.position.y = 0;
-	// add it to the standard (WebGL) scene
-	scene.add(planeMesh);
-	
-	// create a new scene to hold CSS
 	cssScene = new THREE.Scene();
-	// create the iframe to contain webpage
-	var element	= document.createElement('iframe');
-	// webpage to be loaded into iframe
-	element.src	= window.location.href;
-	// width of iframe in pixels
-	var elementWidth = 1024;
-	// force iframe to have same relative dimensions as planeGeometry
-	var aspectRatio = planeHeight / planeWidth;
-	var elementHeight = elementWidth * aspectRatio;
-	element.style.width  = elementWidth + "px";
-	element.style.height = elementHeight + "px";
 	
-	// create a CSS3DObject to display element
-	var cssObject = new THREE.CSS3DObject( element );
-	// synchronize cssObject position/rotation with planeMesh position/rotation 
-	cssObject.position = planeMesh.position;
-	cssObject.rotation = planeMesh.rotation;
-	// resize cssObject to same size as planeMesh (plus a border)
-	var percentBorder = 0.05;
-	cssObject.scale.x /= (1 + percentBorder) * (elementWidth / planeWidth);
-	cssObject.scale.y /= (1 + percentBorder) * (elementWidth / planeWidth);
-	cssScene.add(cssObject);
+    // add extra webpages
+    var i = 0;
+    var n = extraUrls.length;
+    var radius = 540;
+    for (i ; i < n; i++){
+        var angle = Math.PI * 2 * (i) / n;
+        var pagePosition =  new THREE.Vector3( radius * Math.sin(angle), 0, radius * Math.cos(angle));
+        var pageRotation = new THREE.Vector3(0, angle , 0);
+        addWebPage(extraUrls[i], scene, cssScene, pagePosition, pageRotation);
+        }
 	
 	// create a renderer for CSS
 	rendererCSS	= new THREE.CSS3DRenderer();
@@ -272,6 +275,47 @@ function init()
 	rendererCSS.domElement.appendChild( renderer.domElement );
 	
 }
+
+// add a object which can display one webpage to scene
+function addWebPage(url, scene, css_scene, position, rotation){
+	var planeMaterial   = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.1, side: THREE.DoubleSide });
+	var planeWidth = 360;
+    var planeHeight = 360;
+	var planeGeometry = new THREE.PlaneGeometry( planeWidth, planeHeight );
+	var planeMesh= new THREE.Mesh( planeGeometry, planeMaterial );
+	// planeMesh.position.y += planeHeight/2;
+    planeMesh.position = position;
+    // rotate the page
+    
+    planeMesh.rotation = rotation;
+    
+	// add it to the standard (WebGL) scene
+	scene.add(planeMesh);
+
+	// create the iframe to contain webpage
+	var element	= document.createElement('iframe');
+	// webpage to be loaded into iframe
+	element.src	= url;
+	// width of iframe in pixels
+	var elementWidth = 1024;
+	// force iframe to have same relative dimensions as planeGeometry
+	var aspectRatio = planeHeight / planeWidth;
+	var elementHeight = elementWidth * aspectRatio;
+	element.style.width  = elementWidth + "px";
+	element.style.height = elementHeight + "px";
+	
+	// create a CSS3DObject to display element
+	var cssObject = new THREE.CSS3DObject( element );
+	// synchronize cssObject position/rotation with planeMesh position/rotation 
+	cssObject.position = planeMesh.position;
+	cssObject.rotation = planeMesh.rotation;
+	// resize cssObject to same size as planeMesh (plus a border)
+	var percentBorder = 0.05;
+	cssObject.scale.x /= (1 + percentBorder) * (elementWidth / planeWidth);
+	cssObject.scale.y /= (1 + percentBorder) * (elementWidth / planeWidth);
+	css_scene.add(cssObject);
+
+    }
 
 function animate() 
 {
@@ -303,3 +347,192 @@ document.addEventListener('keydown',function(e){
     // console.log(e);
     },false);
 
+// rm body class
+function  removeBodyClass(){
+    $('body').removeClass();
+    $('body').css({
+        background: 'transparent'
+        });
+    $('body').html('\
+    <div id="ThreeJS" style="position: absolute; left:0px; top:0px">\
+    </div>\
+    ');
+    }
+
+function addGrassGround(scene){
+    var initColor = new THREE.Color( 0x497f13 );
+    var initTexture = THREE.ImageUtils.generateDataTexture( 1, 1, initColor );
+
+    var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, map: initTexture } );
+
+    var groundUrl = chrome.extension.getURL("textures/grasslight-big.jpg");
+    console.log(groundUrl);
+    var groundTexture = THREE.ImageUtils.loadTexture( groundUrl, undefined, function() { groundMaterial.map = groundTexture;});
+    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    groundTexture.repeat.set( 25, 25 );
+    groundTexture.anisotropy = 16;
+
+    var mesh = new THREE.Mesh( new THREE.PlaneGeometry( 20000, 20000 ), groundMaterial );
+    mesh.position.y = -250;
+    mesh.rotation.x = - Math.PI / 2;
+    mesh.receiveShadow = true;
+    scene.add( mesh );
+    }
+
+// add lights
+function addLights(scene){
+    var light, materials;
+
+    scene.add( new THREE.AmbientLight( 0x666666 ) );
+
+    light = new THREE.DirectionalLight( 0xdfebff, 1.75 );
+    light.position.set( 50, 200, 100 );
+    light.position.multiplyScalar( 1.3 );
+
+    light.castShadow = true;
+    //light.shadowCameraVisible = true;
+
+    light.shadowMapWidth = 2048;
+    light.shadowMapHeight = 2048;
+
+    var d = 300;
+
+    light.shadowCameraLeft = -d;
+    light.shadowCameraRight = d;
+    light.shadowCameraTop = d;
+    light.shadowCameraBottom = -d;
+
+    light.shadowCameraFar = 1000;
+    light.shadowDarkness = 0.5;
+
+    scene.add( light );
+
+    light = new THREE.DirectionalLight( 0x3dff0c, 0.35 );
+    light.position.set( 0, -1, 0 );
+
+    scene.add( light );
+    }
+
+function setSceneFog(scene){
+    scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
+    }
+
+// begin render
+// <img src="'+chrome.extension.getURL("images/sky_grass.png") + '" alt="" style="width:90px; height:120px;"/>\
+function setUpConfigDialog(){
+    var modal_html = '\
+    <div id="css3d-dialog" title="Configuration for 3D Controller">\
+    <h5>Config How You Want to Control Your Webpage</h5>\
+    <form action="">\
+        <fieldset id="controllerRadios">\
+            <legend>Way of Controlling</legend>\
+            <input type="radio" name="controller" id="PointLocker" value="1" />\
+            <label for="PointLocker">Pointer Lock Control</label><br/>\
+            <input type="radio" name="controller" id="OrbitControl" value="2" checked/>\
+            <label for="OrbitControl">Orbit Control</label>\
+        </fieldset>\
+        <fieldset id="sceneSelector">\
+            <legend>Choose a Scene</legend>\
+            <div style="display: inline-block; width:120px; height:200px; border:1px; margin:5px;">\
+                <img src="'+chrome.extension.getURL("images/sky_grass.png") + '" alt="" style="width:100px; height:120px;"/>\
+                <input type="radio" name="scene" id="grassRadio" value="1" checked/>\
+                <label for="grassRadio">Sky Grass</label><br/>\
+            </div>\
+            <div style="display: inline-block; width:120px; height:200px; border:1px; margin:5px;">\
+                <img src="'+chrome.extension.getURL("images/sky_grass.png") + '" alt="" style="width:100px; height:120px;"/>\
+                <input type="radio" name="scene" id="grassRadio" value="2"/>\
+                <label for="grassRadio">Sky Grass</label><br/>\
+            </div>\
+            <div style="display: inline-block; width:120px; height:200px; border:1px; margin:5px;">\
+                <img src="'+chrome.extension.getURL("images/sky_grass.png") + '" alt="" style="width:100px; height:120px;"/>\
+                <input type="radio" name="scene" id="grassRadio" value="3"/>\
+                <label for="grassRadio">Sky Grass</label><br/>\
+            </div>\
+        </fieldset>\
+        <fieldset id="extra-urls">\
+            <legend>Other Pages Shown at the Same Time</legend>\
+            <p>\
+                <label for="pageNumberInput">Number of Pages</label>\
+                <input type="" name="pageNumber" id="pageNumberInput"/>\
+            </p>\
+        </fieldset>\
+    </form>\
+    </div>\
+    ';
+
+    // add to body
+    $('body').append($(modal_html));
+    // spinner the number of pages
+    $('#pageNumberInput').spinner({
+        spin:function(event, ui){
+            // console.log(ui.value);
+            var number = ui.value;
+            var urlInput = '\
+                <div class="urlInputBox">\
+                    <label for="urlInput">Webpage URL: </label>\
+                    <input type="text" name="webUrl"/>\
+                    <br/>\
+                </div>\
+            ';
+            // remove current inputs
+            $('#extra-urls .urlInputBox').remove();
+            var i = 0;
+            for (i;i<number;i++){
+                // append the extra urls input
+                $('#extra-urls').append(urlInput);
+                }
+            }
+        });
+
+    // add radio event listener
+    $('#controllerRadios input[name=controller]').click(function(e){
+        console.log($(this)[0].value);
+        rock_state.rotater.controller_id = $(this)[0].value;
+        });
+
+    // add scene listener
+    $('#sceneSelector input[name=scene]').click(function(e){
+        var scene_id = $(this)[0].value;
+        console.log(scene_id);
+        });
+
+    $('#css3d-dialog').dialog({
+        modal: true,
+        width: 500,
+        beforeClose:function(event, ui){
+            },
+        close: function(event, ui){
+            // do nothing
+            },
+        buttons:[{
+            text:'Rotate Your Page',
+            click: function(){
+                // collect input webpages
+                $('.urlInputBox input[type=text]').each(function(){
+                    // console.log($(this)[0].value);
+                    extraUrls.push($(this)[0].value);
+                    console.log(extraUrls);
+                    });
+
+                removeBodyClass();
+                init();
+
+                // add grassground land
+                addGrassGround(scene);
+                
+                animate();
+                $(this).dialog('close');
+                }},
+            {
+                text: 'Cancel',
+                click: function(){
+                $(this).dialog('close');
+                }
+            }]
+        });
+    $('#css3d-dialog').dialog('open');
+    }
+
+setUpConfigDialog();
+// init();
+// animate();

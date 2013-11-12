@@ -1,6 +1,9 @@
 var rock_state = {
     sizer:{},
-    rotater:{},
+    rotater:{
+        controller_id: '2',
+        scence_id: '1'
+        },
     rocker:{
         song: 0
         }
@@ -53,9 +56,20 @@ $('#page-tester').click(function(e){
 // state event listener
 $("#songs-selector li").click(function(e){
     console.log($(this).index("#songs-selector li"));
+    // set the songs state
     rock_state.rocker.song = $(this).index("#songs-selector li");
+    // show the song in the input box
+    // console.log($(this).text());
+    $("#selected-songs").text($(this).text());
+    });
+$("#rotater-form input[name=controller-radio]").click(function(e){
+    // change the controller id
+    rock_state.rotater.controller_id = $(this)[0].value;
     });
 
+// set controler listener
+
+// the status code needed to be passed to content js
 function get_state_code(){
     var code = "";
     code += "window.rock_state=";

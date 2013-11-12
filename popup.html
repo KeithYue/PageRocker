@@ -34,9 +34,23 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <p>
-        Page Rotater is a tool that is a kind of the technology of Head-Coupled 3D Transforms. here’s a 
+        Page Rotater provides a way for you to control your webpage in a 3D way.
         <a href="http://www.youtube.com/watch?v=ydIPKkjBlMw&t=0m30s">realistic example</a>
       </p>
+      <form action="" class="form-inline" id="rotater-form" role="form">
+        <div class="radio-inline">
+          <label for="pointer-lock-radio">
+            <input type="radio" id="pointer-lock-radio" name="controller-radio" value ='1' checked/>
+            Pointer Locker Control
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label for="pointer-lock-controler">
+            <input type="radio" name="controller-radio" id="orbit-controler" value='2' />
+            Orbit Control
+          </label>
+        </div>
+      </form>
       <p class="text-center">
         <button id="page-rotater" class="btn btn-primary">Page Rotater</button>
       </p>
@@ -58,11 +72,17 @@
             <ul class="dropdown-menu">
               <li><a href="#">Crazy Kids</a></li>
               <li><a href="#">Move Like A Jagger</a></li>
+              <li><a href="#">What Makes You Beautiful</a></li>
             </ul>
           </div>
-          <input type="text" class="form-control"/>
+          <input type="text" id="selected-songs" class="form-control"/>
+        </div>
+        <div class="input-group">
+          <label for="local-music">Local Music:</label>
+          <input type="file" id="local-music"/>
         </div>
       </form>
+      <br />
       <p class="text-center">
         <button id="page-rocker" class="btn btn-primary">Page Rocker</button>
       </p>

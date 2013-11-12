@@ -7,10 +7,11 @@ A chrome extension which can track user's head to control the display of the web
 
 #### Todo
 * Rock page: flash screen is not perfect shown.
-    * [ ] let user to select songs
-    * [ ] background page state management
-* Page Rotater: have not added 3D-HEAD-COUPLED transform
-    * Add keyboard control
+    * [ ] let user to load local music
+    * [X] let user to select songs
+    * [X] background page state management
+* [ ] Page Rotater: have not added 3D-HEAD-COUPLED transform
+    * [X] Add keyboard control
 * Page Sizer: Nothing
 * [X] javascript audio decode library with spectrum UI: Aurora.js, SoundManager 2
     * [X] Build aurora.js(from node)

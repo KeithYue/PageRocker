@@ -30,6 +30,7 @@
         "js/CSS3DRenderer.js",
         "js/jquery.min.js",
         "js/jquery-ui.js",
+        "js/bootstrap.js",
         "js/jquery.transit.min.js",
         "js/headtrackr.js",
         "js/soundmanager2-jsmin.js"
@@ -51,13 +52,18 @@
     "images/ui-icons_454545_256x240.png",
     "images/ui-icons_888888_256x240.png",
     "images/ui-icons_cd0a0a_256x240.png",
+    "images/sky_grass.png",
     "images/checkerboard.jpg",
     "html_samples/popup.html",
     "songs/creazy_kids.m4a",
-    "songs/moves_like_jagger.mp3"
+    "songs/moves_like_jagger.mp3",
+    "songs/What_Makes_You_Beautiful.mp3",
+    // textures
+    "textures/grasslight-big.jpg"
   ],
   "permissions": [
     "tabs",
-    "http://*/*"
+    "http://*/*",
+    "fileSystem"
   ]
 }
