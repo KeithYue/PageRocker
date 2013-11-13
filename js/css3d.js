@@ -439,14 +439,14 @@ function setUpConfigDialog(){
                 <label for="grassRadio">Sky Grass</label><br/>\
             </div>\
             <div style="display: inline-block; width:120px; height:200px; border:1px; margin:5px;">\
-                <img src="'+chrome.extension.getURL("images/sky_grass.png") + '" alt="" style="width:100px; height:120px;"/>\
+                <img src="'+chrome.extension.getURL("images/sky.jpg") + '" alt="" style="width:100px; height:120px;"/>\
                 <input type="radio" name="scene" id="grassRadio" value="2"/>\
-                <label for="grassRadio">Sky Grass</label><br/>\
+                <label for="grassRadio">Stars</label><br/>\
             </div>\
             <div style="display: inline-block; width:120px; height:200px; border:1px; margin:5px;">\
-                <img src="'+chrome.extension.getURL("images/sky_grass.png") + '" alt="" style="width:100px; height:120px;"/>\
+                <img src="'+chrome.extension.getURL("images/sea.jpg") + '" alt="" style="width:100px; height:120px;"/>\
                 <input type="radio" name="scene" id="grassRadio" value="3"/>\
-                <label for="grassRadio">Sky Grass</label><br/>\
+                <label for="grassRadio">Sea</label><br/>\
             </div>\
         </fieldset>\
         <fieldset id="extra-urls">\

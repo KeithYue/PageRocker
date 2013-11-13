@@ -2,6 +2,7 @@
 \usetheme{default}
 \useoutertheme{infolines}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 % logo
 \logo{\includegraphics[height=0.1\textwidth]{./images/rock.png}}
@@ -124,14 +125,27 @@ How we could combine the current webpage with a 3-D Scene.
 So even in 3D world we can interact with our pages individually without problem.
 \end{frame}
 
+\begin{frame}{Technical Details: Page Rotater}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.5\textwidth]{./images/threejs_corodinate.png}
+        \caption{The Coordinate in ThreeJS}
+    \end{figure}
+\end{center}
+\end{frame}
 
 \begin{frame}{Technical Details: Page Rotater}
 When there n pages, how to set their position and rotation in 3D scene.
 \begin{enumerate}
     \item calculate the angle for the ith webpage: $angle = \pi * 2 * i / n$
     \item The position of ith webpage: $Position_{x} = radius * sin(angle)$ and $Position_{z} = radius * cos(angle)$
-    \item The rotation of ith webpage: $Vector(0, angle, 0)$
+    \item The rotation of ith webpage: $Vector3(0, angle, 0)$
 \end{enumerate}
+We provide two ways to control your page:
+\begin{itemize}
+    \item Orbit Controller
+    \item Pointer Lock Controller
+\end{itemize}
 \end{frame}
 
 % rocker technical details
@@ -146,21 +160,135 @@ HTML5 Web Audio Context:
 \end{frame}
 
 % different ways of rocking
-\begin{frame}
+\begin{frame}{Technical Details: Page Rocker}
 Now Four Ways to make page dance with music:
 \begin{itemize}
-    \item 
+    \item \textbf{ZoomIn/ZoomOut}: images
+    \item \textbf{Position Transition}: paragraph
+    \item \textbf{Rotation}: links
+    \item \textbf{Skew}: titles
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Technical Details: Page Rocker}
+    Given An Elment, how to decide their action(samples), \emph{amp} is the strength related to corresponding frequency(1 of 256):
+\begin{enumerate}
+    \item Fisrt we check the type of the element
+    \item if \emph{images}: $Scale = 0.5 + amp $
+    \item if \emph{paragraph}: $Position_{x} = -10 + 20 * amp$
+    \item if \emph{link}: $Rotation = (-30 + amp * 60)$ degree
+    \item if \emph{titles}: $Skew = (-30 + amp * 60)$ degree
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Technical Details: Page Rocker}
+But we can let user decide all the rocking details by providing configuraion
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.5\textwidth]{./images/amp_configuration.png}
+        \caption{User Configuration for Rocking}
+    \end{figure}
+\end{center}
+Also, you can either choose one online music file or a local music file
+\end{frame}
+
+%% Team work and other information
+\begin{frame}{Development Details}
+\begin{itemize}
+    \item \emph{Dev Lauguage}: Javascript, HTML, CSS
+    \item \emph{Project Repo}: \url{https://github.com/KeithYue/PageRocker}
+    \item \emph{Team Work}:
+        \begin{itemize}
+            \item LUO Xuan:
+                \begin{itemize}
+                    \item product manager
+                    \item general/specific requirements analysis, prototype design
+                    \item UI design, layout and CSS implement
+                \end{itemize}
+            \item WANG Yue:
+                \begin{itemize}
+                    \item chrome extension development, set up dev env
+                    \item page rotater
+                \end{itemize}
+            \item LI Zhi:
+                \begin{itemize}
+                    \item page sizer
+                    \item page rocker
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+% code frequency
+\begin{frame}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{./images/code_frequency.png}
+        \caption{code commit frequency}
+    \end{figure}
+\end{center}
+\end{frame}
+
 % configuraion not included
+\begin{frame}{Issue: What Probles We Have Met}
+How to keep states for each singal webpage seperately?
+\begin{itemize}
+    \item write the extension states to global \emph{window} object using code injection
+\end{itemize}
+
+How to load user local file from an chrome extension dynamically?
+\begin{itemize}
+    \item due to security policy, not allowed in popup extension. Also using code injection, we can load user file dynamically. The request now if from the webpage we are browsing.
+\end{itemize}
+
+Generally we are not allowed to modify the original web page because it's offensive to users.
+\begin{itemize}
+    \item Leave this problem to users, let them devide whether they trust us. But when the web site uses \emph{https} protocol, we are denied.
+\end{itemize}
+
+\end{frame}
 
 % development details
-%% Team work
 %% development env
 %% develop tools
 
 %%%%%%%%%%%%%%%%%%%%%%% For LiZhi: Future Work %%%%%%%%%%%%%%%%%%%%%%%%
 %% Issues
 % Future
+
+\begin{frame}{Future Work}
+How can we improve the current version:
+\begin{enumerate}
+    \item deploy \emph{Rock Your Page} to Chrome Web Store
+    \item page sizer:
+        \begin{itemize}
+            \item use vertical direction of head movement to control scroll bar
+            \item change between tabs using horizental movement
+        \end{itemize}
+    \item page rotater:
+        \begin{itemize}
+            \item different ways to show multiple webpages
+            \item make controller more user friendly
+        \end{itemize}
+    \item page rocker:
+        \begin{itemize}
+            \item involve more html elements
+            \item rock css improvement
+        \end{itemize}
+\end{enumerate}
+\end{frame}
+
+%% Video Demo
+\begin{frame}
+\begin{center}
+    \Huge{Video Demo}
+\end{center}
+\end{frame}
+
+%% Q&A
+\begin{frame}
+\begin{center}
+    \Huge{Q\&A}
+\end{center}
+\end{frame}
 \end{document}
