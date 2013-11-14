@@ -24,13 +24,44 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%% For Luoxuan: Product Manager %%%%%%%%%%%%%%%%%%%%%%%%
 % Motivation
+\begin{frame}{Rock Your Page: Motivation}
+How do we get the final product idea?
+\bigskip
+
+\begin{columns}[t]
+    \begin{column}{0.33\textwidth}
+        Start Point: 
+        \begin{itemize}
+            \item Screen of Laptop $\Longrightarrow$ smaller
+            \item Font of web pages sometimes not suitable
+        \end{itemize}
+
+        Change size of web pages automatically
+    \end{column}
+    \begin{column}{0.33\textwidth}
+        One Step Further
+        \begin{itemize}
+            \item Given a webpage, what can we do about it?
+        \end{itemize}
+
+        map several webpages into one, for easily browsing
+    \end{column}
+    \begin{column}{0.33\textwidth}
+        Final Idea:
+        \begin{itemize}
+            \item two tools
+            \item one small game
+        \end{itemize}
+    \end{column}
+\end{columns}
+\end{frame}
 % Overview Features
 % Three components
 \begin{frame}{Rock Your Page: Features Overview}
 Three Components:
 \begin{itemize}
     \item Page Sizer: adjust size of contents in web pages based on distance between your face and screen automatically.
-    \item Page Rotater: map your 2D web page into 3D scene, multiple pags projection is also supported.
+    \item Page Rotater: map your 2D web page into 3D scene, multiple pages projection is also supported.
     \item Page Rocker: a small game which let your web page dance with music.
 \end{itemize}
 \begin{center}
@@ -75,7 +106,7 @@ Three Components:
     \begin{figure}
         \includegraphics[width=0.25\textwidth]{./images/face_detection_realtime.png}
         \includegraphics[width=0.25\textwidth]{./images/face_detection_possibility.png}
-        \caption{Realtime Face Detection Using Web Camera}
+        \caption{Realtime Face Detection Using Web Camera(\emph{libccv})}
     \end{figure}
 \end{center}
 Which element in web page shouled be sized?
@@ -84,7 +115,7 @@ Which element in web page shouled be sized?
 \end{itemize}
 How should we detemine the zoom amp?
 \begin{equation}
-    zoom\_value = (face\_width / video\_width) / (face\_init\_width / video\_init\_width)
+    zoom\_value = (face\_init\_width / video\_init\_width) / (face\_width / video\_width)
 \end{equation}
 \end{frame}
 
@@ -171,14 +202,19 @@ Now Four Ways to make page dance with music:
 \end{frame}
 
 \begin{frame}{Technical Details: Page Rocker}
-    Given An Elment, how to decide their action(samples), \emph{amp} is the strength related to corresponding frequency(1 of 256):
+    Given An Element, how to decide their action(samples), \emph{amp} is the strength related to corresponding frequency(1 of 256):
 \begin{enumerate}
     \item Fisrt we check the type of the element
-    \item if \emph{images}: $Scale = 0.5 + amp $
+    \item if \emph{images}: $Scale = -0.5 + amp $
     \item if \emph{paragraph}: $Position_{x} = -10 + 20 * amp$
     \item if \emph{link}: $Rotation = (-30 + amp * 60)$ degree
     \item if \emph{titles}: $Skew = (-30 + amp * 60)$ degree
 \end{enumerate}
+
+The general equation:
+\begin{equation}
+    Strengh = BaseLine + amp * Range
+\end{equation}
 \end{frame}
 
 \begin{frame}{Technical Details: Page Rocker}
@@ -192,6 +228,24 @@ But we can let user decide all the rocking details by providing configuraion
 Also, you can either choose one online music file or a local music file
 \end{frame}
 
+% configuraion not included
+% issue
+\begin{frame}{Issue: What Problems We Have Met} How to keep states for each singal webpage seperately?
+\begin{itemize}
+    \item write the extension states to global \emph{window} object using code injection
+\end{itemize}
+
+How to load user local file from an chrome extension dynamically?
+\begin{itemize}
+    \item due to security policy, not allowed in popup extension. Also using code injection, we can load user file dynamically. The request now from the webpage we are browsing.
+\end{itemize}
+
+Generally we are not allowed to modify the original web page because it's offensive to users.
+\begin{itemize}
+    \item Leave this problem to users, let them devide whether they trust us. But when the web site uses \emph{https} protocol, we are denied.
+\end{itemize}
+
+\end{frame}
 %% Team work and other information
 \begin{frame}{Development Details}
 \begin{itemize}
@@ -219,8 +273,17 @@ Also, you can either choose one online music file or a local music file
 \end{itemize}
 \end{frame}
 
+% toolsets
+\begin{frame}{Development Details: Toolsets}
+\begin{itemize}
+    \item Version Control: git version 1.8.3.4
+    \item Js Library: jQuery1.9.2, ThreeJS(Revision58)
+    \item Prototype Design: XMind
+\end{itemize}
+\end{frame}
+
 % code frequency
-\begin{frame}
+\begin{frame}{Development Details}
 \begin{center}
     \begin{figure}
         \includegraphics[width=0.9\textwidth]{./images/code_frequency.png}
@@ -229,24 +292,6 @@ Also, you can either choose one online music file or a local music file
 \end{center}
 \end{frame}
 
-% configuraion not included
-\begin{frame}{Issue: What Probles We Have Met}
-How to keep states for each singal webpage seperately?
-\begin{itemize}
-    \item write the extension states to global \emph{window} object using code injection
-\end{itemize}
-
-How to load user local file from an chrome extension dynamically?
-\begin{itemize}
-    \item due to security policy, not allowed in popup extension. Also using code injection, we can load user file dynamically. The request now if from the webpage we are browsing.
-\end{itemize}
-
-Generally we are not allowed to modify the original web page because it's offensive to users.
-\begin{itemize}
-    \item Leave this problem to users, let them devide whether they trust us. But when the web site uses \emph{https} protocol, we are denied.
-\end{itemize}
-
-\end{frame}
 
 % development details
 %% development env
@@ -259,11 +304,10 @@ Generally we are not allowed to modify the original web page because it's offens
 \begin{frame}{Future Work}
 How can we improve the current version:
 \begin{enumerate}
-    \item deploy \emph{Rock Your Page} to Chrome Web Store
     \item page sizer:
         \begin{itemize}
             \item use vertical direction of head movement to control scroll bar
-            \item change between tabs using horizental movement
+            \item change between tabs using horizontal movement
         \end{itemize}
     \item page rotater:
         \begin{itemize}
@@ -273,8 +317,9 @@ How can we improve the current version:
     \item page rocker:
         \begin{itemize}
             \item involve more html elements
-            \item rock css improvement
+            \item rock css realistic improvement
         \end{itemize}
+    \item deploy \emph{Rock Your Page} to Chrome Web Store
 \end{enumerate}
 \end{frame}
 
