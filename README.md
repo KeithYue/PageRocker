@@ -5,6 +5,10 @@ PageRocker
 
 A chrome extension which can track user's head to control the display of the webpage the user visiting. When zooming in or out, we keep the modal of div static, we just adjust the textual element.
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=ROwrZz5UmnU
+" target="_blank"><img src="http://img.youtube.com/vi/ROwrZz5UmnU/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
 #### Todo
 * Rock page: flash screen is not perfect shown.
     * [ ] let user to load local music
